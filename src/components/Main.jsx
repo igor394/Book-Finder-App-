@@ -8,7 +8,7 @@ import {searchBooks} from "../utils/request";
 const Main = () => {
     const [state, setState] = useState([])
     const [loader, setLoader] = useState(false)
-    const [modalShow, setModalShow] = React.useState(false);
+    const [modalShow, setModalShow] = useState(false);
     const hendlerModal= useCallback(()=>{
         setModalShow(false);
     },[])

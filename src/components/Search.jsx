@@ -6,20 +6,21 @@ const Search = ({searchParams}) => {
     const handlerTarget = useCallback( (e)=>{
         setState(e.target.value);
     },[])
+    const handlerForm = useCallback((e) => {
+        e.preventDefault();
+        searchParams(state);
+        setState('')
+    },[searchParams, state])
 
     return (
         <div style={{paddingTop: '40px'}}>
-            <Form onSubmit={(e) => {
-                e.preventDefault();
-                searchParams(state);
-                setState('')
-            }}>
+            <Form onSubmit={handlerForm}>
                 <div className='d-inline-flex flex-wrap justify-content-center'>
                     <div>
                         <input placeholder='Enter part of the book title' className='input-search' type="text"
                                onChange={handlerTarget} value={state}/>
                     </div>
-                    <div className='btn-search'><Button type='submit' variant="outline-secondary">Search</Button></div>
+                    <div className='btn-search'><Button id='main-btn' type='submit' variant="outline-secondary">Search</Button></div>
                 </div>
             </Form>
         </div>
