@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Search from "./Search";
 import BooksList from "./BooksList";
 import Loader from "./Loader";
@@ -9,23 +9,34 @@ const Main = () => {
     const [state, setState] = useState([])
     const [loader, setLoader] = useState(false)
     const [modalShow, setModalShow] = React.useState(false);
+    const hendlerModal= useCallback(()=>{
+        setModalShow(false);
+    },[])
 
     const searchParams = async (params) => {
-        setLoader(true)
-        let result = await searchBooks(params);
-        if (!result) {
-            setModalShow(true);
-        } else if (result) {
-            setState(result)
+        if(!params){
+            alert('enter params');
+            return false;
         }
-        setLoader(false)
+        setLoader(true)
+        try{
+            let result = await searchBooks(params);
+            if (!result.data.items) {
+                setModalShow(true);
+            } else if (result.data.items) {
+                setState(result.data.items)
+            }
+            setLoader(false)
+        }catch (e) {
+            alert(e.response.data.message)
+        }
     }
 
     return (
         <div className="container d-flex align-items-center flex-column">
             <Search searchParams={searchParams}/>
             {!loader ? <BooksList arr={state}/> : <Loader/>}
-            <ModalNotSearch show={modalShow} onHide={() => setModalShow(false)}/>
+            <ModalNotSearch animation={false}  show={modalShow} onHide={hendlerModal}/>
         </div>
     );
 };
